@@ -21,7 +21,7 @@ def main():
 	win = GraphWin("Control de Fuentes Kepco",width=1000, height=300)
 	win.setCoords(0,0,20,25)
 	#win.setBackground('#BCC6CC')
-	myImage = Image(Point(10,12.5), '/home/javier/backg.gif')
+	myImage = Image(Point(10,12.5), '/home/pi/ProyectoGraduacionJ_MI/backg.gif')
 	myImage.draw(win)
 	
 	line = Line(Point(10, 0), Point(10, 25))
@@ -457,7 +457,7 @@ def main():
 			mensaje2.setText(source2)
 		
 		if cal.clicked(pt):
-			execfile('calv1.py')	
+			execfile('/home/pi/ProyectoGraduacionJ_MI/calv1.py')	
 		
 		if stop.clicked(pt):
 			kepco1.stop()

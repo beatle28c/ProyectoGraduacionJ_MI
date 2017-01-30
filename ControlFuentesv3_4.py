@@ -12,7 +12,7 @@ import io
 import base64
 import Tkinter as tk
 from urllib2 import urlopen
-import glob
+import glob ##### para buscar los puertos USB disponibles
 
 def main():
 	refy=20;
@@ -35,7 +35,7 @@ def main():
 	win = GraphWin("Control de Fuentes Kepco",width=1000, height=300)
 	win.setCoords(0,0,20,25)
 	#win.setBackground('#BCC6CC')
-	myImage = Image(Point(10,12.5), '/home/javier/backg.gif')
+	myImage = Image(Point(10,12.5), 'backg.gif')
 	myImage.draw(win)
 	
 	line = Line(Point(10, 0), Point(10, 25))
