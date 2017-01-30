@@ -320,7 +320,7 @@ def main():
 
 		if connects1.clicked(pt):
 			port1=port1_val.getText()
-			port1=port1.upper();
+			#port1=port1.upper();
 			#port1='/dev/tty'+port1
 			kepco1=Source("Fuente1",port1)
 			estado=kepco1.connectport()
