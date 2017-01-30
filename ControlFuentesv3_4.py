@@ -330,8 +330,8 @@ def main():
 			
 		if connects2.clicked(pt):
 			port2=port2_val.getText()
-			port2=port2.upper()
-			port2='/dev/tty'+port2;
+			#port2=port2.upper()
+			#port2='/dev/tty'+port2;
 			kepco2=Source("Fuente2",port2)
 			estado=kepco2.connectport()
 			mensaje2.setText(estado)
@@ -393,10 +393,10 @@ def main():
 			#plt.show(block=False)
 			
 		if trian2.clicked(pt):
-			n2=float(period_val2.getText())
-			f2=float(freq_val2.getText())
-			V2=float(volt_val2.getText())
-			C2=float(curr_val2.getText())
+			n2=float(period2_val.getText())
+			f2=float(freq2_val.getText())
+			V2=float(volt2_val.getText())
+			C2=float(curr2_val.getText())
 			T2=1.0/f2
 			ts2=Tm;
 			m2=T2/ts2;
