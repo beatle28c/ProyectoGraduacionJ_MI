@@ -3,7 +3,7 @@
 
 from graphics import *
 from button import *
-from serialKepcov3_3 import *
+from serialKepcov3_4 import *
 from HarmGenv1 import *
 import matplotlib.pyplot as plt
 import numpy as np
@@ -320,7 +320,7 @@ def main():
 
 		if connects1.clicked(pt):
 			port1=port1_val.getText()
-			port1=port1.upper();
+			#port1=port1.upper();
 			#port1='/dev/tty'+port1
 			kepco1=Source("Fuente1",port1)
 			estado=kepco1.connectport()
@@ -330,8 +330,8 @@ def main():
 			
 		if connects2.clicked(pt):
 			port2=port2_val.getText()
-			port2=port2.upper()
-			port2='/dev/tty'+port2;
+			#port2=port2.upper()
+			#port2='/dev/tty'+port2;
 			kepco2=Source("Fuente2",port2)
 			estado=kepco2.connectport()
 			mensaje2.setText(estado)
