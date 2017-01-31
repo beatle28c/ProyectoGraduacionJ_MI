@@ -33,9 +33,9 @@ class HarmGen:
 		m=m2+(m1-m2)/2;
 		A=(m1-m2)/2;
 		Y=(Y-m)*(self.a/A);
-		
+		"""
 		plt.plot(t,Y);
 		plt.show(block=False)
 		print(str(len(Y)));
-		
+		"""
 		return Y

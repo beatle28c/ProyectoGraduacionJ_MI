@@ -152,6 +152,7 @@ class Source:
 		self.k.write('VOLT:MODE LIST\n');
 	def WriteVolt(self, voltValue,C):
 		self.voltValue=voltValue;
+		self.C=C
 		self.k.write('*RST\n');
 		self.k.write('OUTP ON\n');
 		self.k.write('VOLT ');
