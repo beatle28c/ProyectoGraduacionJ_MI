@@ -2,10 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class HarmGen:
-	def __init__(self, amplitud,freq,nHarmonicas,t0=0,tau=np.pi):
+	def __init__(self, amplitud,freq,nHarm,t0=0,tau=np.pi):
 		self.a=float(amplitud);
 		self.f=float(freq);
-		self.y=int(nHarmonicas);
+		self.y=int(nHarm);
 		self.t0=float(t0);
 		self.tau=float(tau);
 		Tp=1.0/self.f;
@@ -14,7 +14,7 @@ class HarmGen:
 		self.Tm=Tm;
 	
 	def Harm(self):
-		t=np.arange(0,self.Tp,self.Tm);
+		t=np.arange(0,2*self.Tp,self.Tm);
 		w0=2*np.pi*self.f;
 		Y=0;
 		for i in range(0,self.y+1):
@@ -33,9 +33,9 @@ class HarmGen:
 		m=m2+(m1-m2)/2;
 		A=(m1-m2)/2;
 		Y=(Y-m)*(self.a/A);
-		"""
+		
 		plt.plot(t,Y);
-		plt.show()
+		plt.show(block=False)
 		print(str(len(Y)));
-		"""
+		
 		return Y
