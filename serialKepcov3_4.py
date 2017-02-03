@@ -136,7 +136,7 @@ class Source:
 
 		#print(self.volt[2:len(self.volt)-1]);
 		self.k.write('LIST:VOLT:POIN \n');
-		self.k.readline();
+		#self.k.readline();
 		self.k.write('LIST:DWEL ');
 		self.k.write(str(self.t2));
 		self.k.write('\n');

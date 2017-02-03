@@ -491,7 +491,7 @@ def main():
 			mensaje2.setText(source2)
 		
 		if cal.clicked(pt):
-			execfile('calv1.py')	
+			execfile('calv2.py')	
 		
 		if stop.clicked(pt):
 			kepco1.stop()
