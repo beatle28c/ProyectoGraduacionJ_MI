@@ -23,10 +23,6 @@ def main():
 		puerto1 = puertos[0]
 	except IndexError:
 		puerto1 = 'no hay dispositivo'
-	try:
-		puerto2 = puertos[1]
-	except IndexError:
-		puerto2 = 'no hay dispositivo'
 	
 	win = GraphWin("Control de Fuentes Kepco",width=450, height=400)
 	win.setCoords(0,0,30,40)
