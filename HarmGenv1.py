@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class HarmGen:
-	def __init__(self, amplitud,freq,nHarm,t0=0,tau=np.pi):
+	def __init__(self, amplitud,freq,nHarm,t0=0,tau=np.pi):  ##Función para iniciar la
 		self.a=float(amplitud);
 		self.f=float(freq);
 		self.y=int(nHarm);

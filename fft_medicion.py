@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -17,5 +20,17 @@ class fft_osc:
 			n=int(pow(2, math.ceil(math.log(n+1, 2))));
 		Y=abs(np.fft.fft(S,n));
 		f=np.linspace(0,round(n/100)*(Fs/n),round(n/100)+1);
+		print(len(Y))
+
+
+		plt.subplot(2,1,1)
+		plt.plot(t[0:2499],S);	
+		#plt.title('FFT de senal')
+		plt.xlabel('Tiempo (s)')
+		plt.ylabel('Amplitud (V)')
+	
+		plt.subplot(2,1,2)
 		plt.plot(f[0:200],Y.real[0:200]);
-		plt.show(block=False)
+		#plt.title('Senal de entrada')
+		plt.xlabel('Frecuencia (Hz)')
+		plt.show()

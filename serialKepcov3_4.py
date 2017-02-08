@@ -8,40 +8,40 @@ import time
 
 
 class Source:
-	def __init__(self, name, port):
-		k=serial.Serial()
-		k.baudrate=9600;
-		k.bytesize=serial.EIGHTBITS;
-		k.parity=serial.PARITY_NONE;
-		k.stopbits=serial.STOPBITS_ONE;
-		k.timeout=0.5;
-		k.xonxoff=True;
-		k.rtscts=False;
-		k.write_timeout=0.5;
-		k.dsrdtr=False;
-		k.inter_byte_timeout=None;
-		k.port=port;
-		self.port=port;
-		self.k=k;
-		self.name=name;
+	def __init__(self, name, port):				#Inicia la biblioteca Source, los parametros del puerto cargan una fuente a la vez
+		k=serial.Serial()						#Crea el puerto
+		k.baudrate=9600;						#define velocidad
+		k.bytesize=serial.EIGHTBITS;			#Define tamaño de palabra
+		k.parity=serial.PARITY_NONE;			#Define paridad
+		k.stopbits=serial.STOPBITS_ONE;			#Define bit de parada
+		k.timeout=0.5;							#tiempo de desconexión
+		k.xonxoff=True;							#XONXOFF encendido
+		k.rtscts=False;							#RTSCTS apagado
+		k.write_timeout=0.5;					#tiempo de escritura
+		k.dsrdtr=False;							#DSRDTR apagado
+		k.inter_byte_timeout=None;				
+		k.port=port;							#Puerto donde esta la fuente coenctada
+		self.port=port;							#Permite a las demas funciones accesar al valor de puerto
+		self.k=k;								#Permite a las demas funciones accesar al puerto abierto
+		self.name=name;							#Permite a las demas funciones accesar al nombre de la fuente
 		#k.open();
 		
-	def connectport(self):
-		try: 
-			self.k.open()
-			return "Conectado en puerto: " + self.k.port
-		except Exception, e:
-			return ("Error: " + "\n" +  str(e)[0:len(str(e))/2] + "\n" + str(e)[len(str(e))/2:len(str(e))])
+	def connectport(self):						#Función para conectarse al puerto
+		try: 									
+			self.k.open()						#Abre el puerto
+			return "Conectado en puerto: " + self.k.port		#Si se conecta, muestra el puerto al cual se conecto
+		except Exception, e:					#En caso que no lo abra muestra error de conexión
+			return ("Error: " + "\n" +  str(e)[0:len(str(e))/2] + "\n" + str(e)[len(str(e))/2:len(str(e))]) 
 			#exit()
 		
-		if self.k.isOpen():
-			try:
-				self.k.write('*idn?\n')
-			except Exception, e1:
+		if self.k.isOpen():						#Si el puerto esta abierto
+			try:									
+				self.k.write('*idn?\n')			#escribe comando SCPI 
+			except Exception, e1:				#Si no lo abre, muestra error de conexión
 				return ("error de comunicacion: " + "\n" +  str(e)[0:len(str(e1))/2] + "\n" + str(e1)[len(str(e1))/2:len(str(e1))])
 		
 		else:
-			return ("No se pudo abrir puerto serial")
+			return ("No se pudo abrir puerto serial")	#Si no esta abierto, muestra mensaje
 
 	def WriteTrian(self, voltList,t,f,n,t2,C):
 		self.voltList=voltList;
