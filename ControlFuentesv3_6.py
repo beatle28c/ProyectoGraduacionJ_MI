@@ -2,10 +2,18 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-850 -*-
 
+#Titulo				:ControlFuentesv3_6.py
+#Descripción		:Interfaz de usuario y control de fuentes marca Kepco del SESLab.
+#Autor          	:Javier Campos Rojas
+#Fecha            	:enero-2017
+#Versión         	:3.6
+#Notas          	:
+#==============================================================================
+
 from graphics import *
 from button import *
-from serialKepcov3_4 import *
-from HarmGenv1 import *
+from serialKepcov3_5 import *
+from HarmGenv2 import *
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -56,10 +64,6 @@ def main():
 	info.activate()
 	stop = Button(win, Point(refx,refy-15), width_b, heigh_b, "Stop")
 	stop.activate()
-	
-	#meas = Button(win, Point(refx,refy-6), width_b, heigh_b, "Medir V1")
-	#meas.activate()
-	
 
 	sin2 = Button(win, Point(refx2,refy), width_b, heigh_b, "sin(ωt)")
 	sin2.activate()
@@ -154,7 +158,7 @@ def main():
 
 		################## Harmonicas 1 ##################
 
-	harm=Text(Point(refx+4,refy-12),"Harmonicas: ")
+	harm=Text(Point(refx+4,refy-12),"Ármonicas: ")
 	harm.setFace('arial')
 	harm.setStyle('bold')
 	harm.setSize(12)
@@ -257,7 +261,7 @@ def main():
 
 		################## Harmonicas 1 ##################
 
-	harm2=Text(Point(refx2+4,refy-12),"Harmonicas: ")
+	harm2=Text(Point(refx2+4,refy-12),"Ármonicas: ")
 	harm2.setFace('arial')
 	harm2.setStyle('bold')
 	harm2.setSize(12)
@@ -288,7 +292,6 @@ def main():
 	port2_val.setText(puerto2)
 	port2_val.draw(win)
 	
-	#'/dev/ttyUSB0'
 	
 		################## Mensaje de lectura ##################
 	mensaje=Text(Point(5,2),"")
@@ -304,11 +307,8 @@ def main():
 	mensaje2.setSize(11)
 	mensaje2.setTextColor("black")
 	mensaje2.draw(win)
-	
+
 	pt = win.getMouse()
-	#kepco1=Source("Fuente1",port1)
-	#kepco2=Source("Fuente1",port2)
-	#kepco1=Source("Fuente1")
 	
 	while not quitButton.clicked(pt):
 		puertos=glob.glob('/dev/tty[U]*')
@@ -325,18 +325,12 @@ def main():
 
 		if connects1.clicked(pt):
 			port1=port1_val.getText()
-			#port1=port1.upper();
-			#port1='/dev/tty'+port1
 			kepco1=Source("Fuente1",port1)
 			estado=kepco1.connectport()
 			mensaje.setText(estado)
-			#estado=kepco1.connect()
-			#mensaje.setText(estado)
 			
 		if connects2.clicked(pt):
 			port2=port2_val.getText()
-			#port2=port2.upper()
-			#port2='/dev/tty'+port2;
 			kepco2=Source("Fuente2",port2)
 			estado=kepco2.connectport()
 			mensaje2.setText(estado)
@@ -352,7 +346,9 @@ def main():
 			kepco2.WriteVolt(V2,C2)
 						
 		if Harm.clicked(pt):
-			y=float(harm_val.getText())
+			y1=harm_val.getText();
+			y1=y1.split(',');
+			y=[int(i) for i in y1]
 			n=float(period_val.getText())
 			f=float(freq_val.getText())
 			V=float(volt_val.getText())
@@ -363,10 +359,13 @@ def main():
 			Harm1=HarmGen(V,f,y);
 			funct=Harm1.Harm()
 			funct=np.round(funct,3)
-			kepco1.WriteVoltSine(funct,t,f,n,ts,C)
+			kepco1.WriteVoltSine(funct,f,n,ts,C)
 
 		if Harm2.clicked(pt):
-			y2=float(harm2_val.getText())
+			y3=harm2_val.getText()
+			y2=[];
+			for i in range(0,len(y3),2):
+				y2.append(int(y3[i]))
 			n2=float(period2_val.getText())
 			f2=float(freq2_val.getText())
 			V2=float(volt2_val.getText())
@@ -377,11 +376,10 @@ def main():
 			Harm3=HarmGen(V2,f2,y2);
 			funct2=Harm3.Harm()
 			funct2=np.round(funct2,3)
-			kepco2.WriteVoltSine(funct2,t2,f2,n2,ts,C2)
+			kepco2.WriteVoltSine(funct2,f2,n2,ts,C2)
 			
 		if trian.clicked(pt):
-			
-			#ts=0.001;
+
 			n=float(period_val.getText())
 			f=float(freq_val.getText())
 			V=float(volt_val.getText())
@@ -403,9 +401,7 @@ def main():
 				m=len(funct);
 				funct=funct[0:m]
 				t=t[0:m]
-			kepco1.WriteTrian(funct,t,f,n,ts,C)
-			#plt.plot(t,funct)
-			#plt.show(block=False)
+			kepco1.WriteTrian(funct,f,n,ts,C)
 			
 		if trian2.clicked(pt):
 			n2=float(period2_val.getText())
@@ -426,15 +422,9 @@ def main():
 				m2=len(funct2);
 				funct2=funct[0:m2]
 				t2=t[0:m2]
-			"""
-			m=m/2;
-			funct=funct[0:m]
-			t=t[0:m]
-			"""
+
 			funct2=np.round(funct2,3)
-			kepco2.WriteVoltSine(funct2,t2,f2,n2,ts2,C2)
-			#plt.plot(t,funct)
-			#plt.show(block=False)
+			kepco2.WriteVoltSine(funct2,f2,n2,ts2,C2)
 		
 		if sin.clicked(pt):
 
@@ -457,9 +447,7 @@ def main():
 				funct=funct[0:m]
 				t=t[0:m]
 			funct=np.round(funct,3)
-			kepco1.WriteVoltSine(funct,t,f,n,ts,C)
-			#plt.plot(t,funct)
-			#plt.show(block=False)
+			kepco1.WriteVoltSine(funct,f,n,ts,C)
 			print(str(len(funct))+','+str(len(t)))
 
 		if sin2.clicked(pt):
@@ -482,9 +470,7 @@ def main():
 				funct2=funct[0:m2]
 				t2=t[0:m2]
 			funct2=np.round(funct2,3)
-			kepco2.WriteVoltSine(funct2,t2,f2,n2,ts2,C2)
-			#plt.plot(t,funct)
-			#plt.show(block=False)
+			kepco2.WriteVoltSine(funct2,f2,n2,ts2,C2)
 
 		if info.clicked(pt):
 			source1=kepco1.identify()

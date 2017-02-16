@@ -2,14 +2,17 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-850 -*-
 
+#Titulo				:serialKepcov3_5.py
+#Descripción		:Biblioteca para el control de las funciones de las fuentes marca Kepco del SESLab.
+#Autor          	:Javier Campos Rojas
+#Fecha            	:enero-2017
+#Versión         	:3.5
+#Notas          	:
+#==============================================================================
+
 import serial
 import numpy as np
 import time
-
-
-#'/dev/ttyUSB0'
-
-
 
 class Source:
 	def __init__(self, name, port):				#Inicia la biblioteca Source, los parametros del puerto cargan una fuente a la vez
@@ -47,13 +50,11 @@ class Source:
 		else:
 			return ("No se pudo abrir puerto serial")	#Si no esta abierto, muestra mensaje
 
-	def WriteTrian(self, voltList,t,f,n,t2,C): 	#Función para crear una señal Triangular#Recibe: tensiones, periodo de muestreo, frecuencia onda
+	def WriteTrian(self,voltList,f,n,t2,C): 	#Función para crear una señal Triangular#Recibe: tensiones, periodo de muestreo, frecuencia onda
 		self.voltList=voltList;					
-		self.t=t;
 		self.f=f
 		self.n=n
 		self.t2=t2
-		#T0=1.0/self.f
 		self.timeStep=len(self.t)
 		self.k.write('*RST\n');					#Comando para reiniciar fuente e iniciar modo remoto
 		self.k.write('LIST:CLE\n');				#limpiar listas de tensión ingresadas en memoria
@@ -82,10 +83,6 @@ class Source:
 				else:
 					self.k.write(self.volt_out);
 					self.k.write('\n');
-		
-		#print(self.volt[2:len(self.volt)-1]);
-		self.k.write('LIST:VOLT:POIN \n');
-		self.k.readline();
 		self.k.write('LIST:DWEL ');
 		self.k.write(str(self.t2));
 		self.k.write('\n');
@@ -100,19 +97,14 @@ class Source:
 		self.k.write('\n');
 		self.k.write('VOLT:MODE LIST\n');
 
-
-	def WriteVoltSine(self, voltList,t,f,n,t2,C):
+	def WriteVoltSine(self, voltList,f,n,t2,C):
 		self.voltList=voltList;
-		self.t=t;
 		self.f=f
 		self.n=n
 		self.t2=t2
 		self.C=C
-		#T0=1.0/self.f
-		self.timeStep=len(self.t)
 		self.k.write('*RST\n');
 		self.k.write('LIST:CLE\n');
-		
 		step=10;
 		m=len(self.voltList)//step
 		m=m*step
@@ -137,10 +129,6 @@ class Source:
 				else:
 					self.k.write(self.volt_out);
 					self.k.write('\n');
-
-		#print(self.volt[2:len(self.volt)-1]);
-		self.k.write('LIST:VOLT:POIN \n');
-		#self.k.readline();
 		self.k.write('LIST:DWEL ');
 		self.k.write(str(self.t2));
 		self.k.write('\n');
@@ -154,7 +142,8 @@ class Source:
 		self.k.write(str(self.C));
 		self.k.write('\n');
 		self.k.write('VOLT:MODE LIST\n');
-	def WriteVolt(self, voltValue,C):
+
+	def WriteVolt(self,voltValue,C):
 		self.voltValue=voltValue;
 		self.C=C
 		self.k.write('*RST\n');
@@ -167,18 +156,23 @@ class Source:
 		self.k.write('\n');
 		self.k.write('MEAS:VOLT?');
 		self.k.write('\n');
+
 	def identify(self):
 		self.k.write('*idn?\n');
 		name = self.k.readline()
 		return name;
+	
 	def stop(self):
 		self.k.write('*RST\n');
 		self.k.write('LIST:CLE\n');
+		
 	def measV(self):
 		self.k.write('MEAS:VOLT?\n')
+		
 	def readM(self):
 		volt = self.k.readline()
 		return volt;
+		
 	def measC(self):
 		self.k.write('MEAS:CURR?\n')
 		curr = self.k.readline()
@@ -188,7 +182,7 @@ class Source:
 		self.k.write('CAL:DATA ');
 		self.k.write(str(val));
 		self.k.write('\n');
-	
+		
 	def calMinusFine(self,val):
 		self.k.write('CAL:DATA ');
 		self.k.write('-');
@@ -212,23 +206,29 @@ class Source:
 		self.k.write(str(password));	
 		self.k.write('\n');
 		self.k.write('CAL:STAT 1\n');
+		
 	def calZero(self):
 		self.k.write('CAL:VOLT ZERO\n');
+		
 	def calMax(self):
 		self.k.write('CAL:VOLT MAX\n');
+		
 	def calMin(self):
 		self.k.write('CAL:VOLT MIN\n');
+		
 	def calVPRmax(self):
 		self.k.write('CAL:VPR MAX\n');
+		
 	def calVPRmin(self):
 		self.k.write('CAL:VPR MIN\n');
+		
 	def calSave(self):
 		self.k.write('CAL:DATA SAVE\n');
 		self.k.write('CAL:STAT 0\n');
 		self.k.write('CAL:STAT?\n');
 		status = self.k.readline()
 		return status;
-	
+
 	def connect(self):
 		try: 
 			self.k.open()

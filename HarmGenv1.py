@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# -*- coding: utf-850 -*-
+
 import matplotlib.pyplot as plt
 import numpy as np
 

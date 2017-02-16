@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# -*- coding: utf-850 -*-
+
+#Titulo				:calv2.py
+#Descripción		:Interfaz de usuario para la calibración de las fuentes Kepco.
+#Autor          	:Javier Campos Rojas
+#Fecha            	:enero-2017
+#Versión         	:2
+#Notas          	:
+#==============================================================================
 
 from graphics import *
 from button import *
@@ -74,8 +83,6 @@ def main():
 	quitButton = Button(win, Point(15,2), width_b-2, heigh_b, "Quit")
 	
 	
-	
-	
 	###############################---Datos Fuente 1---###############################
 
 		################## Calibracion Fina ##################
@@ -115,7 +122,7 @@ def main():
 	
 		################## Constraseña ##################
 	
-	passw=Text(Point(refx-10,refy-3),"Password:")
+	passw=Text(Point(refx-10,refy-1),"Password:")
 	passw.setFace('arial')
 	passw.setStyle('bold')
 	passw.setSize(10)
