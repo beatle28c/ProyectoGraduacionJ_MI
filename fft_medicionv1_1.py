@@ -48,7 +48,7 @@ class fft_osc:
 			
 		for p in range(1,m+1):
 			ax=plt.subplot(2,m,p)
-			plt.title('Sennal de entrada')
+			plt.title('Señal de entrada'.decode('utf-8'))
 			plt.plot(t[p-1][0:2499],S[p-1]);
 			plt.ylim([-15,15])
 			plt.grid(True)
@@ -56,7 +56,7 @@ class fft_osc:
 			plt.ylabel('Amplitud (V)')
 		for p in range(1,m+1):
 			ax=plt.subplot(2,m,p+m)
-			plt.title('FFT de sennal')
+			plt.title('FFT de señal'.decode('utf-8'))
 			#plt.semilogy(f[p-1][0:200],20*log10((Y[p-1]).real[0:200]));
 			plt.plot(f[p-1][1:len(f[p-1])],(Y[p-1]).real[1:len(f[p-1])]);
 			#plt.axis([0, 250,0,15000])

@@ -129,6 +129,7 @@ class Source:
 				else:
 					self.k.write(self.volt_out);
 					self.k.write('\n');
+		self.k.write('LIST:VOLT:POIN \n');
 		self.k.write('LIST:DWEL ');
 		self.k.write(str(self.t2));
 		self.k.write('\n');

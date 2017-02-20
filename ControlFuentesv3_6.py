@@ -22,10 +22,13 @@ import base64
 import Tkinter as tk
 from urllib2 import urlopen
 import glob ##### para buscar los puertos USB disponibles
+from controlTektronix import *
 
 def main():
-	refy=20;
-	refx=3;
+	xgrid=27;
+	ygrid=24;
+	refy=22;
+	refx=2;
 	refx2=13;
 	width_b=3;
 	heigh_b=1.5;
@@ -41,16 +44,22 @@ def main():
 		puerto2 = 'no hay dispositivo'
 	
 		
-	win = GraphWin("Control de Fuentes Kepco",width=1000, height=300)
-	win.setCoords(0,0,20,25)
+	win = GraphWin("Control de Fuentes Kepco",width=1100, height=300)
+	win.setCoords(0,0,ygrid,xgrid)
 	#win.setBackground('#BCC6CC')
 	myImage = Image(Point(10,12.5), 'backg.gif')
 	myImage.draw(win)
 	
-	line = Line(Point(10, 0), Point(10, 25))
+	
+	line = Line(Point(10, 0), Point(10, xgrid))
 	line.setFill("white")
 	line.setWidth(2)
 	line.draw(win)
+	
+	line2 = Line(Point(20, 0), Point(20, xgrid))
+	line2.setFill("white")
+	line2.setWidth(2)
+	line2.draw(win)
 	
 	sin = Button(win, Point(refx,refy), width_b, heigh_b, "sin(ωt)")
 	sin.activate()
@@ -83,10 +92,13 @@ def main():
 	connects2 = Button(win, Point(refx2+6.5,refy+3), width_b-2.5, heigh_b, "ok")
 	connects2.activate()
 	
-	cal = Button(win, Point(17,1.5), 2, 2, "Calibrar")
+	caracterizar = Button(win, Point(22,10), 2, 2, "Caracterizar")
+	caracterizar.activate()
+	
+	cal = Button(win, Point(22,6), 2, 2, "Calibrar")
 	cal.activate()
 	
-	quitButton = Button(win, Point(19.2,1.5), 1, 2, "Quit")
+	quitButton = Button(win, Point(22,2), 2, 2, "Quit")
 	quitButton.activate()
 	
 	
@@ -451,7 +463,7 @@ def main():
 			print(str(len(funct))+','+str(len(t)))
 
 		if sin2.clicked(pt):
-			n2=float(period2_val.getText())
+			n2=float(	period2_val.getText())
 			f2=float(freq2_val.getText())
 			V2=float(volt2_val.getText())
 			C2=float(curr2_val.getText())
@@ -487,8 +499,14 @@ def main():
 		
 		if stop.clicked(pt):
 			kepco1.stop()
+			
 		if stop2.clicked(pt):
 			kepco2.stop()
+			
+		if caracterizar.clicked(pt):
+			osc1=getWave()
+			osc1.OscWave()
+			
 		pt = win.getMouse()
 	win.close()
 main()

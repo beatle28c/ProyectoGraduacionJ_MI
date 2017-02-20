@@ -48,7 +48,7 @@ class HarmGen:
 				b=self.fourier_bk(k);
 				Y=Y+a*np.cos(self.w0*k*t)+b*np.sin(self.w0*k*t);
 		elif len(self.y)==1:
-			for k in range(0,self.y):
+			for k in range(1,self.y[0]+1	):
 				a=self.fourier_ak(k);
 				b=self.fourier_bk(k);
 				Y=Y+a*np.cos(self.w0*k*t)+b*np.sin(self.w0*k*t);
