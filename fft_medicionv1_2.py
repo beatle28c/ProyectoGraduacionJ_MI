@@ -35,17 +35,39 @@ class fft_osc:
 			t[p]=np.linspace(0,tm[p]*L[p],L[p]+1);
 		dim=1;
 		for i in range(0,m):
-			for p in range(0,4):
+			for p in range(0,5):
 				n[i]=int(pow(2, math.ceil(math.log(n[i]+1, 2))));
 		for i in range(0,m):
 			w[i]=int(round(n[i]/100)+1)
 		w2=int(max(w))
 		n=int(max(n));
 		Y=np.empty(shape=[m,n]);
-		f=np.empty(shape=[m,w2-1]);
+		f=np.empty(shape=[m,w2]);
+		xpos=np.empty(shape=[m,5]);
+		ymax=np.empty(shape=[m,5]);
+		THD=np.empty(shape=[m]);
 		for p in range(0,m):
 			Y[p]=abs(np.fft.hfft(S[p],n));
 			f[p]=np.linspace(0,round(n/100)*(Fs[p]/n),round(n/100)+1);
+			maxval=max(Y[p])
+			step=[i for i, j in np.ndenumerate(Y[p]) if j == maxval][0][0];
+			if step==0:
+				maxval=max(Y[p][15:10000])
+				step=[i for i, j in np.ndenumerate(Y[p]) if j == maxval][0][0];
+				#print(maxval,step)
+			for u in range(0,5):
+				if u==0:
+					ymax[p][0]=maxval;
+					xpos[p][0]=[i for i, j in np.ndenumerate(Y[p]) if j == maxval][0][0]
+				else:
+					print(Y[p][(step*(u+1))-1:(step*(u+1))+1])
+					#ymax[p][u]=max(Y[p][(step*(u+1))-1:(step*(u+1))+1])
+					xpos[p][u]=[i for i, j in np.ndenumerate(Y[p]) if j == ymax[p][u]][0][0]	
+			Vthd=0.0;
+			for u in range(1,5):
+				Vthd=((ymax[p][u])**2)+Vthd
+			THD[p]=np.sqrt(Vthd)/ymax[p][0]
+			#print(f[p])
 		for p in range(1,m+1):
 			ax=plt.subplot(2,m,p)
 			plt.title('Señal de entrada'.decode('utf-8'))
@@ -56,6 +78,12 @@ class fft_osc:
 			plt.ylabel('Amplitud (V)')
 		for p in range(1,m+1):
 			ax=plt.subplot(2,m,p+m)
+			
+			for u in range(0,5):
+				ax.annotate('F'+str(u),xy=(f[p-1][int(xpos[p-1][u])],ymax[p-1][u]), xycoords='data',xytext=(f[p-1][int(xpos[p-1][u])],ymax[p-1][u]+2000), textcoords='data',size=10, va="center", ha="center", bbox=dict(boxstyle="round", fc="w"), arrowprops=dict(arrowstyle="-|>", connectionstyle="arc3,rad=0",fc="b"),)
+			ax.annotate('THD='+str(round(THD[p-1]*100,4))+'%',xy=(250,0), xycoords='data',xytext=(200,17000), textcoords='data',size=11, va="center", ha="center", bbox=dict(boxstyle="square", fc="w"),)
+			
+			#ax.annotate('f0', xy=(50.0, yy[p-1]), xytext=(x[p-1]+10, yy[p-1]+10),arrowprops=dict(arrowstyle="->",connectionstyle="arc3"),)
 			plt.title('FFT de señal'.decode('utf-8'))
 			#plt.semilogy(f[p-1][0:200],20*log10((Y[p-1]).real[0:200]));
 			plt.plot(f[p-1][0:len(f[p-1])],(Y[p-1]).real[0:len(f[p-1])]);

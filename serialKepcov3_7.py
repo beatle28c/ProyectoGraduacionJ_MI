@@ -44,7 +44,8 @@ class Source:
 		
 		if self.k.isOpen():						
 			try:									
-				self.k.write('*idn?\n')			 
+				self.k.write('*idn?\n');
+				return self.k.readline();			 
 			except Exception, e1:				
 				return ("error de comunicacion: " + "\n" +  str(e)[0:len(str(e1))/2] + "\n" + str(e1)[len(str(e1))/2:len(str(e1))])
 		
@@ -52,22 +53,21 @@ class Source:
 			return ("No se pudo abrir puerto serial")
 
 	def WriteTrian(self,Volt,f,n,C):
-		self.V=Volt;	
+		self.V=Volt;
+		self.C=C;
 		self.f=f
 		self.n=n
-		self.ts=ts
-		self.timeStep=len(self.t)
-		self.k.write('*RST\n');			
+		#self.k.write('*RST\n');			
 		self.k.write('LIST:CLE\n');				
 		self.k.write('LIST:VOLT ');	
 		tsm=0.0005;		#Tiempo de muestreo minimo
 		T=1.0/self.f
 		m=float(int(T/tsm));
 		ts=round(T/m,6);
-		t=np.arange(0,T,ts)
+		t=np.arange(0,T,ts);
 		m=round(m/2)*2;	
-		funct1=V*np.arange(0,1,1/(m/2))
-		funct2=V*np.arange(1,0,-1/(m/2))
+		funct1=self.V*np.arange(0,1,1/(m/2))
+		funct2=self.V*np.arange(1,0,-1/(m/2))
 		funct=np.concatenate([funct1,funct2])
 		funct=np.round(funct)
 		if len(t) < len(funct):
@@ -104,18 +104,19 @@ class Source:
 					self.k.write(self.volt_out);
 					self.k.write('\n');
 		self.k.write('LIST:DWEL ');
-		self.k.write(str(self.ts));
+		self.k.write(str(ts));
 		self.k.write('\n');
 		self.k.write('LIST:COUN ');
 		self.k.write(str(self.n));
 		self.k.write('\n');
-		self.k.write('LIST:VOLT?\n');
-		self.k.readline();
+		#self.k.write('LIST:VOLT?\n');
+		#self.k.readline();
 		self.k.write('OUTP ON\n');
 		self.k.write('CURR ');
 		self.k.write(str(self.C));
 		self.k.write('\n');
 		self.k.write('VOLT:MODE LIST\n');
+		print([ts,1.0/(ts*len(funct))]);
 
 	def WriteVoltSine(self, Volt,f,n,C):
 		self.V=Volt;
@@ -123,12 +124,14 @@ class Source:
 		self.n=n
 		self.C=C
 		self.k.write('*RST\n');
+		self.k.write('*CLS\n');
 		self.k.write('LIST:CLE\n');
 		tsm=0.0005;		#Tiempo de muestreo minimo
 		T=1.0/self.f
 		m=float(int(T/tsm));
 		ts=round(T/m,6);
-		t=np.arange(0,T,ts)
+		#t=np.arange(0,T,ts);
+		t=np.arange(0,m*ts,ts);
 		funct=self.V*np.sin(2*np.pi*self.f*t)
 		"""		
 		if len(t) < len(funct):
@@ -173,15 +176,16 @@ class Source:
 		self.k.write('LIST:COUN ');
 		self.k.write(str(self.n));
 		self.k.write('\n');
-		self.k.write('LIST:VOLT?\n');
-		self.k.readline();
+		#self.k.write('LIST:VOLT?\n');
+		#self.k.readline();
 		self.k.write('OUTP ON\n');
 		self.k.write('CURR ');
 		self.k.write(str(self.C));
 		self.k.write('\n');
 		self.k.write('VOLT:MODE LIST\n');
-		plt.plot(t,funct)
-		plt.show(block=False);
+		#plt.plot(t,funct)
+		#plt.show(block=False);
+		print([ts,1.0/(ts*len(funct))]);
 		
 	def WriteHarm(self, Volt,f,n,C,y):
 		self.V=Volt;
@@ -190,6 +194,7 @@ class Source:
 		self.C=C
 		self.y=y #puede ser lista o un numero entero
 		self.k.write('*RST\n');
+		self.k.write('*CLS\n');
 		self.k.write('LIST:CLE\n');
 		tsm=0.0005;		#Tiempo de muestreo minimo
 		T=1.0/self.f
@@ -231,13 +236,14 @@ class Source:
 		self.k.write('LIST:COUN ');
 		self.k.write(str(self.n));
 		self.k.write('\n');
-		self.k.write('LIST:VOLT?\n');
-		self.k.readline();
+		#self.k.write('LIST:VOLT?\n');
+		#self.k.readline();
 		self.k.write('OUTP ON\n');
 		self.k.write('CURR ');
 		self.k.write(str(self.C));
 		self.k.write('\n');
 		self.k.write('VOLT:MODE LIST\n');
+		print([ts,1.0/(ts*len(funct))],self.y);
 
 	def WriteVolt(self,voltValue,C):
 		self.voltValue=voltValue;
@@ -250,8 +256,8 @@ class Source:
 		self.k.write('CURR ');
 		self.k.write(str(self.C));
 		self.k.write('\n');
-		self.k.write('MEAS:VOLT?');
-		self.k.write('\n');
+		#self.k.write('MEAS:VOLT?');
+		#self.k.write('\n');
 
 	def identify(self):
 		self.k.write('*idn?\n');
@@ -260,6 +266,7 @@ class Source:
 	
 	def stop(self):
 		self.k.write('*RST\n');
+		self.k.write('*OUTP OFF\n');
 		self.k.write('LIST:CLE\n');
 		
 	def measV(self):

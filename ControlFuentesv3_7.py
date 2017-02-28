@@ -26,7 +26,7 @@ from controlTektronix import *
 
 def main():
 	xgrid=27;
-	ygrid=24;
+	ygrid=23;
 	refy=22;
 	refx=2;
 	refx2=12;
@@ -92,13 +92,13 @@ def main():
 	connects2 = Button(win, Point(refx2+7,refy+3), width_b-1.3, heigh_b, "Conectar")
 	connects2.activate()
 	
-	caracterizar = Button(win, Point(22,10), 2, 2, "Caracterizar")
+	caracterizar = Button(win, Point(21.5,10), 2, 2, "Caracterizar")
 	caracterizar.activate()
 	
-	cal = Button(win, Point(22,6), 2, 2, "Calibrar")
+	cal = Button(win, Point(21.5,6), 2, 2, "Calibrar")
 	cal.activate()
 	
-	quitButton = Button(win, Point(22,2), 2, 2, "Quit")
+	quitButton = Button(win, Point(21.5,2), 2, 2, "Quit")
 	quitButton.activate()
 	
 	
