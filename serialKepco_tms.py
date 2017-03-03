@@ -118,21 +118,22 @@ class Source:
 		self.k.write('VOLT:MODE LIST\n');
 		print([ts,1.0/(ts*len(funct))]);
 
-	def WriteVoltSine(self, Volt,f,n,C):
+	def WriteVoltSine(self, Volt,f,n,C,tm):
+		#self.k.flushInput()
 		self.V=Volt;
 		self.f=f
 		self.n=n
 		self.C=C
-		#self.k.write('ABOR\n');
-		#self.k.write('*RST\n');
-		self.k.write('*CLS\n');
-		self.k.write('LIST:CLE\n');
+		self.tsm=tm
+		self.stop();
 		#tsm=0.0005;		#Tiempo de muestreo minimo
-		tsm=0.000093;
+		#tsm=0.000093;
 		#tsm=0.0001;
 		T=1.0/self.f
-		m=float(int(T/tsm));
-		ts=round(T/m,6);
+		ts=self.tsm;
+		m=float(int(T/self.tsm));
+		#m=float(int(T/self.tsm));
+		#ts=round(T/m,9);
 		#t=np.arange(0,T,ts);
 		t=np.arange(0,m*ts,ts);
 		funct=self.V*np.sin(2*np.pi*self.f*t)
@@ -148,7 +149,7 @@ class Source:
 		"""
 		voltList=np.round(funct,3)
 		self.voltList=voltList;
-		step=15;
+		step=20;
 		m=len(self.voltList)//step
 		m=m*step
 		voltList1=self.voltList[0:m]
@@ -175,9 +176,10 @@ class Source:
 		self.k.write('LIST:VOLT:POIN \n');
 		self.k.write('LIST:DWEL ');
 		self.k.write(str(ts));
+		print(str(ts));
 		self.k.write('\n');
 		self.k.write('LIST:COUN ');
-		self.k.write(str(self.n));
+		self.k.write(str(int(self.n)));
 		self.k.write('\n');
 		#self.k.write('LIST:VOLT?\n');
 		#self.k.readline();

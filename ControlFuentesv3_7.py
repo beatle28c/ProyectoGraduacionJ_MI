@@ -12,7 +12,7 @@
 
 from graphics import *
 from button import *
-from serialKepcov3_7 import *
+from serialKepco_tms import *
 from HarmGenv2 import *
 import matplotlib.pyplot as plt
 import numpy as np
@@ -73,6 +73,8 @@ def main():
 	info.activate()
 	stop = Button(win, Point(refx,refy-15), width_b, heigh_b, "Stop")
 	stop.activate()
+	currM = Button(win, Point(refx+4,refy-15), width_b, heigh_b, "Current Mode")
+	currM.activate()
 
 	sin2 = Button(win, Point(refx2,refy), width_b, heigh_b, "sin(ωt)")
 	sin2.activate()
@@ -80,8 +82,8 @@ def main():
 	Harm2.activate()
 	trian2 = Button(win, Point(refx2,refy-6), width_b, heigh_b, "Triangular")
 	trian2.activate()
-	dcout = Button(win, Point(refx2,refy-9), width_b, heigh_b, "DC out")
-	dcout.activate()
+	dcout2 = Button(win, Point(refx2,refy-9), width_b, heigh_b, "DC out")
+	dcout2.activate()
 	info2 = Button(win, Point(refx2,refy-12), width_b, heigh_b, "info")
 	info2.activate()
 	stop2 = Button(win, Point(refx2,refy-15), width_b, heigh_b, "Stop")
@@ -319,6 +321,13 @@ def main():
 	mensaje2.setSize(11)
 	mensaje2.setTextColor("black")
 	mensaje2.draw(win)
+	
+	tsm=Entry(Point(refx+6.5,refy-15),10)
+	tsm.setFace('arial')
+	tsm.setSize(10)
+	tsm.setTextColor("white")
+	tsm.setFill('#6B6B6B')
+	tsm.draw(win)
 
 	pt = win.getMouse()
 	
@@ -352,10 +361,16 @@ def main():
 			C=float(curr_val.getText())
 			kepco1.WriteVolt(V,C)
 		
-		if dcout.clicked(pt):
+		if dcout2.clicked(pt):
 			V2=float(volt2_val.getText())
 			C2=float(curr2_val.getText())
 			kepco2.WriteVolt(V2,C2)
+		
+		if currM.clicked(pt):
+			V=float(volt_val.getText())
+			C=float(curr_val.getText())
+			estado=kepco1.WriteCurr(V,C)
+			mensaje.setText(estado)
 						
 		if Harm.clicked(pt):
 			y1=harm_val.getText();
@@ -398,7 +413,8 @@ def main():
 			f=float(freq_val.getText())
 			V=float(volt_val.getText())
 			C=float(curr_val.getText())
-			kepco1.WriteVoltSine(V,f,n,C)
+			ts=float(tsm.getText())
+			kepco1.WriteVoltSine(V,f,n,C,ts)
 
 		if sin2.clicked(pt):
 			n2=float(	period2_val.getText())

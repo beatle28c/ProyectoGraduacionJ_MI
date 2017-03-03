@@ -38,20 +38,17 @@ class fft_osc:
 			for p in range(0,5):
 				n[i]=int(pow(2, math.ceil(math.log(n[i]+1, 2))));
 		for i in range(0,m):
-			w[i]=int(round(n[i]))
+			w[i]=int(round(n[i]/100)+1)
 		w2=int(max(w))
-		n=int(max(n));	
+		n=int(max(n));
 		Y=np.empty(shape=[m,n]);
 		f=np.empty(shape=[m,w2]);
 		xpos=np.empty(shape=[m,5]);
 		ymax=np.empty(shape=[m,5]);
 		THD=np.empty(shape=[m]);
-		
 		for p in range(0,m):
 			Y[p]=abs(np.fft.hfft(S[p],n));
-			print(len(Y[p]))
-			#f[p]=np.linspace(0,round(n/10)*(Fs[p]/n),round(n/10)+2);
-			f[p]=np.linspace(0,(Fs[p]),round(n));
+			f[p]=np.linspace(0,round(n/100)*(Fs[p]/n),round(n/100)+1);
 			maxval=max(Y[p])
 			step=[i for i, j in np.ndenumerate(Y[p]) if j == maxval][0][0];
 			if step==0:
@@ -63,14 +60,14 @@ class fft_osc:
 					ymax[p][0]=maxval;
 					xpos[p][0]=[i for i, j in np.ndenumerate(Y[p]) if j == maxval][0][0]
 				else:
-					#print(Y[p][(step*(u+1))-1:(step*(u+1))+1])
-					ymax[p][u]=max(Y[p][(step*(u+1)):(step*(u+1))+1])
-					xpos[p][u]=[i for i, j in np.ndenumerate(Y[p]) if j == ymax[p][u]][0][0]
-					print(f[p][int(xpos[p][u])])
+					print(Y[p][(step*(u+1))-1:(step*(u+1))+1])
+					#ymax[p][u]=max(Y[p][(step*(u+1))-1:(step*(u+1))+1])
+					xpos[p][u]=[i for i, j in np.ndenumerate(Y[p]) if j == ymax[p][u]][0][0]	
 			Vthd=0.0;
 			for u in range(1,5):
 				Vthd=((ymax[p][u])**2)+Vthd
 			THD[p]=np.sqrt(Vthd)/ymax[p][0]
+			#print(f[p])
 		for p in range(1,m+1):
 			ax=plt.subplot(2,m,p)
 			plt.title('Señal de entrada'.decode('utf-8'))
@@ -89,11 +86,9 @@ class fft_osc:
 			#ax.annotate('f0', xy=(50.0, yy[p-1]), xytext=(x[p-1]+10, yy[p-1]+10),arrowprops=dict(arrowstyle="->",connectionstyle="arc3"),)
 			plt.title('FFT de señal'.decode('utf-8'))
 			#plt.semilogy(f[p-1][0:200],20*log10((Y[p-1]).real[0:200]));
-			#plt.plot(f[p-1][0:len(f[p-1])],(Y[p-1]).real[0:len(f[p-1])]);
-			#print(len(f[p-1]),len(Y[p-1].real))
-			plt.plot(f[p-1],(Y[p-1]).real);
+			plt.plot(f[p-1][0:len(f[p-1])],(Y[p-1]).real[0:len(f[p-1])]);
 			#plt.axis([0, 250,0,15000])
-			plt.xlim([0,600])
+			plt.xlim([0,300])
 			#plt.ylim([0,18000])
 			#ax.xaxis.set_major_locator(MultipleLocator(10))
 			ax.xaxis.set_minor_locator(MultipleLocator(10))

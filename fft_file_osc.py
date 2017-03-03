@@ -32,8 +32,8 @@ file_name=[]
 #file_name.append('/media/javier/JAVIER/ALL0025/F0025CH2.CSV');
 #file_name.append('/media/javier/JAVIER/C000002/CCH1002.CSV');
 #file_name.append('/media/javier/JAVIER/C000002/CCH2002.CSV');
-#file_name.append('/media/javier/JAVIER/ALL0026/F0026CH1.CSV');
-#file_name.append('/media/javier/JAVIER/ALL0026/F0026CH2.CSV');
-file_name.append('/media/javier/JAVIER/ALL0027/F0027CH1.CSV');
+file_name.append('/media/javier/JAVIER/ALL0026/F0026CH1.CSV');
+file_name.append('/media/javier/JAVIER/ALL0026/F0026CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0027/F0027CH1.CSV');
 
 osc1.file(file_name,1,4);
