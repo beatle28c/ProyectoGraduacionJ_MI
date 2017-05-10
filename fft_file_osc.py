@@ -32,8 +32,34 @@ file_name=[]
 #file_name.append('/media/javier/JAVIER/ALL0025/F0025CH2.CSV');
 #file_name.append('/media/javier/JAVIER/C000002/CCH1002.CSV');
 #file_name.append('/media/javier/JAVIER/C000002/CCH2002.CSV');
-file_name.append('/media/javier/JAVIER/ALL0026/F0026CH1.CSV');
-file_name.append('/media/javier/JAVIER/ALL0026/F0026CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0026/F0026CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0026/F0026CH2.CSV');
 #file_name.append('/media/javier/JAVIER/ALL0027/F0027CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0029/F0029CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0029/F0029CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0030/F0030CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0030/F0030CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0031/F0031CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0031/F0031CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0032/F0032CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0032/F0032CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0033/F0033CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0033/F0033CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0034/F0034CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0034/F0034CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0035/F0035CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0035/F0035CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0036/F0036CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0036/F0036CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0047/F0047CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0047/F0047CH2.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0037/F0037CH1.CSV');
+#file_name.append('/media/javier/JAVIER/ALL0037/F00307CH2.CSV');
+file_name.append('/media/Drive/TEC/Mediciones Osc/ALL0047/F0047CH1.CSV');
+file_name.append('/media/Drive/TEC/Mediciones Osc/ALL0047/F0047CH2.CSV');
+
+
+
+
 
 osc1.file(file_name,1,4);

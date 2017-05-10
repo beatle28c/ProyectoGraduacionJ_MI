@@ -12,8 +12,8 @@
 
 from graphics import *
 from button import *
-from serialKepco_tms import *
-from HarmGenv3 import *
+from serialKepco_tmsv2 import *
+from HarmGenv2 import *
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -413,8 +413,7 @@ def main():
 			f=float(freq_val.getText())
 			V=float(volt_val.getText())
 			C=float(curr_val.getText())
-			ts=float(tsm.getText())
-			kepco1.WriteVoltSine(V,f,n,C,ts)
+			kepco1.WriteVoltSine2(V,f,n,C)
 
 		if sin2.clicked(pt):
 			n2=float(	period2_val.getText())

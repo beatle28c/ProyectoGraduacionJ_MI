@@ -13,7 +13,7 @@
 import serial
 import numpy as np
 import time
-from HarmGenv3 import *
+from HarmGenv2 import *
 
 class Source:
 	def __init__(self, name, port):
@@ -118,6 +118,28 @@ class Source:
 		self.k.write('VOLT:MODE LIST\n');
 		print([ts,1.0/(ts*len(funct))]);
 
+	def WriteVoltSine2(self, Volt,f,n,C):
+		self.V=Volt;
+		self.f=f;
+		self.n=n;
+		self.C=C;
+		self.k.flushInput();
+		self.k.write('LIST:CLEAR\n');
+		self.k.write('OUTP OFF\n');
+		self.k.write('*RST\n');
+		self.k.write('LIST:VOLT:APPLY SINE,');
+		self.k.write(str(float(self.f)));
+		self.k.write(',')
+		self.k.write(str(float(self.n)));
+		self.k.write('\n');
+		self.k.write('LIST:COUN ');
+		self.k.write(str(int(self.n)));
+		self.k.write('CURR ');
+		self.k.write(str(self.C));
+		self.k.write('\n');
+		self.k.write('OUTP ON\n');
+		self.k.write('VOLT:MODE LIST\n');
+
 	def WriteVoltSine(self, Volt,f,n,C,tm):
 		self.k.flushInput();
 		self.k.write('*OUTP OFF\n');
@@ -207,12 +229,11 @@ class Source:
 		self.k.write('*CLS\n');
 		self.k.write('LIST:CLE\n');
 		tsm=0.0005;		#Tiempo de muestreo minimo
-		tsm=0.0002;		#Tiempo de muestreo minimo
 		T=1.0/self.f
 		m=float(int(T/tsm));
 		ts=round(T/m,6);
 		t=np.arange(0,T,ts)
-		Harm1=HarmGen(self.V,self.f,self.y,ts);
+		Harm1=HarmGen(self.V,self.f,self.y);
 		funct=Harm1.Harm()
 		voltList=np.round(funct,3)
 		self.voltList=voltList;
@@ -275,17 +296,14 @@ class Source:
 		self.voltValue=voltValue;
 		self.C=C
 		self.k.write('*RST\n');
-		"""
+		self.k.write('OUTP ON\n');
 		self.k.write('VOLT ');
 		self.k.write(str(self.voltValue));
 		self.k.write('\n');
-		"""
 		self.k.write('CURR');
-		self.k.write(str(float(self.C)));
+		self.k.write(str(self.C));
 		self.k.write('\n');
-		self.k.write('OUTP ON\n');
 		self.k.write('FUNC MODE CURR\n');
-		self.k.flushInput();
 		self.k.write('FUNC:MODE?\n');
 		state = self.k.readline()
 		return state;

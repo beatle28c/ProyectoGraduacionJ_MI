@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-850 -*-
 
-#Titulo				:ControlFuentesv3_7.py
+#Titulo				:KpecoGestionControl.py
 #Descripción		:Interfaz de usuario y control de fuentes marca Kepco del SESLab.
 #Autor          	:Javier Campos Rojas
-#Fecha            	:enero-2017
-#Versión         	:3.6
+#Fecha            	:Marzo-2017
+#Versión         	:1.0
 #Notas          	:
 #==============================================================================
 
 from graphics import *
 from button import *
-from serialKepco_tms import *
+from serialKepco_tmsv3 import *
 from HarmGenv3 import *
 import matplotlib.pyplot as plt
 import numpy as np
@@ -22,7 +22,7 @@ import base64
 import Tkinter as tk
 from urllib2 import urlopen
 import glob ##### para buscar los puertos USB disponibles
-from controlTektronix import *
+#from controlTektronix import *
 
 def main():
 	xgrid=27;
@@ -65,26 +65,24 @@ def main():
 	sin.activate()
 	Harm = Button(win, Point(refx,refy-3), width_b, heigh_b, "Ármonicas")
 	Harm.activate()
-	trian = Button(win, Point(refx,refy-6), width_b, heigh_b, "Triangular")
-	trian.activate()
+	currM = Button(win, Point(refx,refy-6), width_b, heigh_b, "Current Mode")
+	currM.activate()
 	dcout = Button(win, Point(refx,refy-9), width_b, heigh_b, "DC out")
 	dcout.activate()
-	info = Button(win, Point(refx,refy-12), width_b, heigh_b, "info")
+	info = Button(win, Point(refx,refy-12), width_b, heigh_b, "Información Fuente")
 	info.activate()
 	stop = Button(win, Point(refx,refy-15), width_b, heigh_b, "Stop")
 	stop.activate()
-	currM = Button(win, Point(refx+4,refy-15), width_b, heigh_b, "Current Mode")
-	currM.activate()
 
 	sin2 = Button(win, Point(refx2,refy), width_b, heigh_b, "sin(ωt)")
 	sin2.activate()
 	Harm2 = Button(win, Point(refx2,refy-3), width_b, heigh_b, "Ármonicas")
 	Harm2.activate()
-	trian2 = Button(win, Point(refx2,refy-6), width_b, heigh_b, "Triangular")
-	trian2.activate()
+	currM2 = Button(win, Point(refx2,refy-6), width_b, heigh_b, "Current Mode")
+	currM2.activate()
 	dcout2 = Button(win, Point(refx2,refy-9), width_b, heigh_b, "DC out")
 	dcout2.activate()
-	info2 = Button(win, Point(refx2,refy-12), width_b, heigh_b, "info")
+	info2 = Button(win, Point(refx2,refy-12), width_b, heigh_b, "Información Fuente")
 	info2.activate()
 	stop2 = Button(win, Point(refx2,refy-15), width_b, heigh_b, "Stop")
 	stop2.activate()
@@ -321,13 +319,6 @@ def main():
 	mensaje2.setSize(11)
 	mensaje2.setTextColor("black")
 	mensaje2.draw(win)
-	
-	tsm=Entry(Point(refx+6.5,refy-15),10)
-	tsm.setFace('arial')
-	tsm.setSize(10)
-	tsm.setTextColor("white")
-	tsm.setFill('#6B6B6B')
-	tsm.draw(win)
 
 	pt = win.getMouse()
 	
@@ -343,18 +334,27 @@ def main():
 			puerto2 = 'no hay dispositivo'
 		port1_val.setText(puerto1)
 		port2_val.setText(puerto2)
-
+		try:
+			mensaje.setText(puerto1)
+			mensaje2.setText(puerto2)
+		except Exception, e:
+			mensaje.setText('no hay dispositivo')
+			mensaje2.setText('no hay dispositivo')
+		
+			
 		if connects1.clicked(pt):
 			port1=port1_val.getText()
 			kepco1=Source("Fuente1",port1)
-			estado=kepco1.connectport()
-			mensaje.setText(estado)
+			m1=kepco1.connectport()
+			m2=kepco1.identify()
+			mensaje.setText(m1 + "\n" + m2)
 			
 		if connects2.clicked(pt):
 			port2=port2_val.getText()
 			kepco2=Source("Fuente2",port2)
-			estado=kepco2.connectport()
-			mensaje2.setText(estado)
+			m1=kepco2.connectport()
+			m2=kepco2.identify()
+			mensaje2.setText(m1 + "\n" + m2)
 		
 		if dcout.clicked(pt):
 			V=float(volt_val.getText())
@@ -371,6 +371,12 @@ def main():
 			C=float(curr_val.getText())
 			estado=kepco1.WriteCurr(V,C)
 			mensaje.setText(estado)
+		
+		if currM2.clicked(pt):
+			V2=float(volt2_val.getText())
+			C2=float(curr2_val.getText())
+			estado2=kepco2.WriteCurr(V2,C2)
+			mensaje2.setText(estado2)
 						
 		if Harm.clicked(pt):
 			y1=harm_val.getText();
@@ -392,29 +398,14 @@ def main():
 			V2=float(volt2_val.getText())
 			C2=float(curr2_val.getText())
 			kepco2.WriteHarm(funct2,f2,n2,C2)
-			
-		if trian.clicked(pt):
-
-			n=float(period_val.getText())
-			f=float(freq_val.getText())
-			V=float(volt_val.getText())
-			C=float(curr_val.getText())
-			kepco1.WriteTrian(V,f,n,C)
-			
-		if trian2.clicked(pt):
-			n2=float(period2_val.getText())
-			f2=float(freq2_val.getText())
-			V2=float(volt2_val.getText())
-			C2=float(curr2_val.getText())
-			kepco2.WriteTrian(V2,f2,n2,C2)
 		
 		if sin.clicked(pt):
 			n=float(period_val.getText())
 			f=float(freq_val.getText())
 			V=float(volt_val.getText())
 			C=float(curr_val.getText())
-			ts=float(tsm.getText())
-			kepco1.WriteVoltSine(V,f,n,C,ts)
+			#ts=float(tsm.getText())
+			kepco1.WriteVoltSine(V,f,n,C)
 
 		if sin2.clicked(pt):
 			n2=float(	period2_val.getText())
@@ -441,11 +432,11 @@ def main():
 			
 		if stop2.clicked(pt):
 			kepco2.stop()
-			
+		"""	
 		if caracterizar.clicked(pt):
-			osc1=getWave()
-			osc1.OscWave()
-			
+			#osc1=getWave()
+			#osc1.OscWave()
+		"""
 		pt = win.getMouse()
 	win.close()
 main()

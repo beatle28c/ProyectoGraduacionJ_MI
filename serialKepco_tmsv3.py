@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-850 -*-
 
-#Titulo				:serialKepcov3_7.py
+#Titulo				:serialKepco_tmsv3.py
 #Descripción		:Biblioteca para el control de las funciones de las fuentes marca Kepco del SESLab.
 #Autor          	:Javier Campos Rojas
-#Fecha            	:enero-2017
-#Versión         	:3.6
+#Fecha            	:marzo-2017
+#Versión         	:3
 #Notas          	:
 #==============================================================================
 
@@ -37,8 +37,8 @@ class Source:
 	def connectport(self):						
 		try: 									
 			self.k.open()						
-			return "Conectado en puerto: " + self.k.port		
-		except Exception, e:					
+			return "Conectado en puerto: " + "\n" + self.k.port	
+		except IOError, e:					
 			return ("Error: " + "\n" +  str(e)[0:len(str(e))/2] + "\n" + str(e)[len(str(e))/2:len(str(e))]) 
 			#exit()
 		
@@ -46,11 +46,14 @@ class Source:
 			try:									
 				self.k.write('*idn?\n');
 				return self.k.readline();			 
-			except Exception, e1:				
+			except IOError, e1:				
 				return ("error de comunicacion: " + "\n" +  str(e)[0:len(str(e1))/2] + "\n" + str(e1)[len(str(e1))/2:len(str(e1))])
-		
 		else:
-			return ("No se pudo abrir puerto serial")
+			try:									
+				ser.inWaiting()						
+				return "Conectado en puerto: " + "\n" + self.k.port				 
+			except IOError, e1:
+				return ("No se pudo abrir puerto serial")
 
 	def WriteTrian(self,Volt,f,n,C):
 		self.V=Volt;
@@ -60,7 +63,8 @@ class Source:
 		#self.k.write('*RST\n');			
 		self.k.write('LIST:CLE\n');				
 		self.k.write('LIST:VOLT ');	
-		tsm=0.0005;		#Tiempo de muestreo minimo
+		#tsm=0.0002;		#Tiempo de muestreo minimo
+		tsm=0.0005
 		T=1.0/self.f
 		m=float(int(T/tsm));
 		ts=round(T/m,6);
@@ -118,7 +122,29 @@ class Source:
 		self.k.write('VOLT:MODE LIST\n');
 		print([ts,1.0/(ts*len(funct))]);
 
-	def WriteVoltSine(self, Volt,f,n,C,tm):
+	def WriteVoltSine2(self, Volt,f,n,C):
+		self.V=Volt;
+		self.f=f;
+		self.n=n;
+		self.C=C;
+		self.k.flushInput();
+		self.k.write('LIST:CLEAR\n');
+		self.k.write('OUTP OFF\n');
+		self.k.write('*RST\n');
+		self.k.write('LIST:VOLT:APPLY SINE,');
+		self.k.write(str(float(self.f)));
+		self.k.write(',')
+		self.k.write(str(float(self.n)));
+		self.k.write('\n');
+		self.k.write('LIST:COUN ');
+		self.k.write(str(int(self.n)));
+		self.k.write('CURR ');
+		self.k.write(str(self.C));
+		self.k.write('\n');
+		self.k.write('OUTP ON\n');
+		self.k.write('VOLT:MODE LIST\n');
+
+	def WriteVoltSine(self, Volt,f,n,C):
 		self.k.flushInput();
 		self.k.write('*OUTP OFF\n');
 		self.k.write('*RST\n');
@@ -126,15 +152,14 @@ class Source:
 		self.f=f
 		self.n=n
 		self.C=C
-		self.tsm=tm
-		#tsm=0.0005;		#Tiempo de muestreo minimo
-		#tsm=0.000093;
-		#tsm=0.0001;
+		#self.tsm=tm
+		#tsm=0.0002;		#Tiempo de muestreo minimo
+		tsm=0.0005
+		self.tsm=tsm;
 		T=1.0/self.f
-		ts=self.tsm;
+		#ts=self.tsm;
 		m=float(int(T/self.tsm));
-		#m=float(int(T/self.tsm));
-		#ts=round(T/m,9);
+		ts=round(T/m,9);
 		#t=np.arange(0,T,ts);
 		t=np.arange(0,m*ts,ts);
 		funct=self.V*np.sin(2*np.pi*self.f*t)
@@ -150,7 +175,8 @@ class Source:
 		"""
 		voltList=np.round(funct,3)
 		self.voltList=voltList;
-		step=20;
+		#step=20;
+		step=10;
 		m=len(self.voltList)//step
 		m=m*step
 		voltList1=self.voltList[0:m]
@@ -180,8 +206,10 @@ class Source:
 		self.k.write('LIST:VOLT:POIN \n');
 		self.k.write('LIST:DWEL ');
 		self.k.write(str(ts));
-		print(str(ts));
 		self.k.write('\n');
+		self.k.flushInput();
+		self.k.write('LIST:DWEL?\n');
+		print(self.k.readline());
 		self.k.write('LIST:COUN ');
 		self.k.write(str(int(self.n)));
 		self.k.write('\n');
@@ -206,13 +234,13 @@ class Source:
 		self.k.write('*RST\n');
 		self.k.write('*CLS\n');
 		self.k.write('LIST:CLE\n');
-		tsm=0.0005;		#Tiempo de muestreo minimo
-		tsm=0.0002;		#Tiempo de muestreo minimo
+		#tsm=0.0002;		#Tiempo de muestreo minimo
+		tsm=0.0005
 		T=1.0/self.f
 		m=float(int(T/tsm));
 		ts=round(T/m,6);
 		t=np.arange(0,T,ts)
-		Harm1=HarmGen(self.V,self.f,self.y,ts);
+		Harm1=HarmGen(self.V,self.f,self.y);
 		funct=Harm1.Harm()
 		voltList=np.round(funct,3)
 		self.voltList=voltList;
@@ -275,17 +303,14 @@ class Source:
 		self.voltValue=voltValue;
 		self.C=C
 		self.k.write('*RST\n');
-		"""
+		self.k.write('OUTP ON\n');
 		self.k.write('VOLT ');
 		self.k.write(str(self.voltValue));
 		self.k.write('\n');
-		"""
 		self.k.write('CURR');
-		self.k.write(str(float(self.C)));
+		self.k.write(str(self.C));
 		self.k.write('\n');
-		self.k.write('OUTP ON\n');
-		self.k.write('FUNC MODE CURR\n');
-		self.k.flushInput();
+		self.k.write('FUNC:MODE CURR\n');
 		self.k.write('FUNC:MODE?\n');
 		state = self.k.readline()
 		return state;

@@ -24,19 +24,24 @@ class getWave:
 		tek=osc.ask('*IDN?')
 		fecha=datetime.datetime.now()
 		self.fecha=fecha;
-		return tek
+		self.filename='C000000';
+		#return tek
 
 	def OscWave(self):
-		#foldername=str(fecha.day)+str(fecha.month)+str(fecha.hour)+str(fecha.minute);
-		#crearFolder='FILES:MKDir "A:'+r'\"'+foldername+r'\"'
-		#self.osc.write(crearFolder) ###Debe tener un largo de 7 caractéres
-		#guarda1='SAV:WAVE CH1, "A:'+r'\'+foldername+r'\'+'CH1'+foldername002.CSV"'
-		#self.osc.write('SAV:WAVE CH1, "A:\C000002\CCH1002.CSV"')
-		#guarda2=
-		self.osc.write('SAV:WAVE CH2, "A:\C000002\CCH2002.CSV"') 
-		#guarda3=
-		self.osc.write('SAV:IMA "A:\C000002\C000002.PNG"')
-		#guarda4=
-		self.osc.write('SAV:SETU "A:\C000002\C000002.SET"')	
-		
-		
+		self.numeracion=open('numeracion.txt','r');
+		a=self.numeracion.readline(1); 
+		self.numeracion=open('numeracion.txt','w');
+		self.numeracion.write(str(int(a)+1));
+		FolderName=self.filename[0:len(self.filename)-len(a)]+a;
+		file1=self.filename[0:len(self.filename)-len(a)-2]+'CH1'+a;
+		file2=self.filename[0:len(self.filename)-len(a)-2]+'CH1'+a;
+		self.numeracion.close();
+		Folder='FILESystem:MKDir "A:'+'\\'+FolderName+'"'
+		WFile1='SAV:WAVE CH1, "A:'+'\\'+FolderName+'\\'+file1+'.CSV"'
+		WFile2='SAV:WAVE CH2, "A:'+'\\'+FolderName+'\\'+file2+'.CSV"'
+		print(Folder)
+		print(WFile1)
+		print(WFile2)
+		self.osc.write(Folder);
+		self.osc.write(WFile1);
+		self.osc.write(WFile2);

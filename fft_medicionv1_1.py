@@ -35,17 +35,21 @@ class fft_osc:
 			t[p]=np.linspace(0,tm[p]*L[p],L[p]+1);
 		dim=1;
 		for i in range(0,m):
-			for p in range(0,4):
+			for p in range(0,5):
 				n[i]=int(pow(2, math.ceil(math.log(n[i]+1, 2))));
 		for i in range(0,m):
-			w[i]=int(round(n[i]/100)+1)
+			#w[i]=int(round(n[i]/100)+1)
+			w[i]=int(round(n[i]))
 		w2=int(max(w))
+		print(w2)
 		n=int(max(n));
 		Y=np.empty(shape=[m,n]);
-		f=np.empty(shape=[m,w2-1]);
+		#f=np.empty(shape=[m,w2-1]);
+		f=np.empty(shape=[m,w2]);
 		for p in range(0,m):
 			Y[p]=abs(np.fft.hfft(S[p],n));
-			f[p]=np.linspace(0,round(n/100)*(Fs[p]/n),round(n/100)+1);
+			#f[p]=np.linspace(0,round(n/100)*(Fs[p]/n),round(n/100)+1);
+			f[p]=np.linspace(0,(Fs[p]),round(n));
 		for p in range(1,m+1):
 			ax=plt.subplot(2,m,p)
 			plt.title('Señal de entrada'.decode('utf-8'))
