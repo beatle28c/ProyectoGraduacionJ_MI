@@ -75,13 +75,13 @@ class fft_osc:
 					xpos[p][0]=[i for i, j in np.ndenumerate(Y[p]) if j == maxval][0][0]
 				else:
 					#print(Y[p][(step*(u+1))-1:(step*(u+1))+1])
-					ymax[p][u]=max(Y[p][(step*(u+1))-1:(step*(u+1))+1])
+					ymax[p][u]=min(Y[p][(step*(u+1))-3:(step*(u+1))+1])
 					xpos[p][u]=[i for i, j in np.ndenumerate(Y[p]) if j == ymax[p][u]][0][0]
 					#print(f[p][int(xpos[p][u])])
 			Vthd=0.0;
 			for u in range(1,5):
 				Vthd=((ymax[p][u])**2)+Vthd
-			THD[p]=np.sqrt(Vthd/(ymax[p][0]**2))
+			THD[p]=np.sqrt(Vthd)/100.0
 			data[p][0]=max(S[p]);
 			data[p][1]=f[p][int(xpos[p][0])]
 			data[p][2]=THD[p]*100;
@@ -94,8 +94,8 @@ class fft_osc:
 				
 		for p in range(1,m+1):
 			ax=plt.subplot(2,m,p)
-			plt.title('Señal de entrada'.decode('utf-8'))
-			plt.plot(t[p-1][0:2499],S[p-1]);
+			plt.title('Señal'.decode('utf-8'))
+			plt.plot(t[p-1][0:len(t[p-1])-1],S[p-1]);
 			#plt.ylim([-350,350])
 			plt.grid(True)
 			plt.xlabel('Tiempo (s)')
@@ -107,7 +107,7 @@ class fft_osc:
 			ax=plt.subplot(2,m,p+m)
 			
 			for u in range(0,5):
-				ax.annotate('F'+str(u),xy=(f[p-1][int(xpos[p-1][u])],ymax[p-1][u]), xycoords='data',xytext=(f[p-1][int(xpos[p-1][u])],ymax[p-1][u]+10), textcoords='data',size=10, va="center", ha="center", bbox=dict(boxstyle="round", fc="w"), arrowprops=dict(arrowstyle="-|>", connectionstyle="arc3,rad=0",fc="b"),)
+				ax.annotate('F'+str(u+1),xy=(f[p-1][int(xpos[p-1][u])],ymax[p-1][u]), xycoords='data',xytext=(f[p-1][int(xpos[p-1][u])],ymax[p-1][u]+10), textcoords='data',size=10, va="center", ha="center", bbox=dict(boxstyle="round", fc="w"), arrowprops=dict(arrowstyle="-|>", connectionstyle="arc3,rad=0",fc="b"),)
 			ax.annotate('THD='+str(round(THD[p-1]*100,4))+'%',xy=(250,0), xycoords='data',xytext=(200,max(ymax[p-1])/2), textcoords='data',size=11, va="center", ha="center", bbox=dict(boxstyle="square", fc="w"),)
 			#print(max(ymax[p-1]))
 			
@@ -127,12 +127,14 @@ class fft_osc:
 			#ax.yaxis.set_major_locator(MultipleLocator(1000))
 			#ax.yaxis.set_minor_locator(MultipleLocator(500))
 			plt.grid(True)
+			plt.ylabel('Porcentaje ('+r'%'+')')
 			plt.xlabel('Frecuencia (Hz)')
 
 		
 		plt.tight_layout()
 		mng = plt.get_current_fig_manager()
 		mng.resize(*mng.window.maxsize())
-		#plt.show(block=False)
 		plt.savefig('f1.png')
+		#plt.show()
+		plt.clf()
 		return data

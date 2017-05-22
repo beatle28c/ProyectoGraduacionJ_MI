@@ -14,6 +14,7 @@ import serial
 import numpy as np
 import time
 from HarmGenv3 import *
+import time
 
 class Source:
 	def __init__(self, name, port):
@@ -224,7 +225,6 @@ class Source:
 		#plt.plot(t,funct)
 		#plt.show(block=False);
 		print([ts,1.0/(ts*len(funct))]);
-		
 	def WriteHarm(self, Volt,f,n,C,y):
 		self.V=Volt;
 		self.f=f
