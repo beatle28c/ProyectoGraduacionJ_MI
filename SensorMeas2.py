@@ -38,7 +38,7 @@ vout=np.array(vout)
 volt1Meas=0.512*vout/32767.0
 a=max(volt1Meas)-((max(volt1Meas)-min(volt1Meas))/2.0)
 volt1Meas=volt1Meas-a
-w=savgol_filter(vout,5,2,mode='nearest')
+w=savgol_filter(volt1Meas,5,2,mode='nearest')
 w=savgol_filter(w,11,2)
 print(len(vout))
 #plt.plot(t,vout,t,w)
