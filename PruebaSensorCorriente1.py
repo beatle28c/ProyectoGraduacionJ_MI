@@ -32,7 +32,7 @@ adc1.start_adc(0, gain=GAIN, data_rate=860)
 vout=[]
 start = time.time()
 tm=0.5;
-tf=0.085
+tf=0.5
 vout=[]
 GPIO.output(Led, GPIO.LOW);
 #adc1.read_adc_difference(1,gain=GAIN,data_rate=860)

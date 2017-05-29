@@ -31,7 +31,7 @@ adc1.start_adc(1, gain=GAIN, data_rate=860)
 #Curr1.start_adc(0, gain=GAIN)
 vout=[]
 tm=0.00001;
-tf=0.1
+tf=0.5
 start = time.time()
 while (time.time() - start) <= tf:
 	volt1 = adc1.get_last_result()
@@ -50,7 +50,7 @@ volt1Meas=Cal*vout/32767.0
 a=max(volt1Meas)-((max(volt1Meas)-min(volt1Meas))/2.0)
 volt1Meas=volt1Meas-a
 w=savgol_filter(volt1Meas,5,1,mode='nearest')
-w=savgol_filter(w,11,1)
+#w=savgol_filter(w,11,1)
 print(max(volt1Meas)/np.sqrt(2))
 plt.style.use('ggplot')
 #plt.plot(t,vout,t,w)
