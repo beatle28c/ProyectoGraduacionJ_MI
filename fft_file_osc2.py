@@ -100,10 +100,10 @@ def main():
 			Medicion = Image(Point(xgrid/2-10,ygrid/2), 'f1.png')
 			Medicion.draw(win)
 			print(data)
-		
+		"""
 		if NewMeas.clicked(pt):
 			##
-			
+		"""
 		pt = win.getMouse()
 	win.close()
 main()

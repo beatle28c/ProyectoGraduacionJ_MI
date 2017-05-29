@@ -10,7 +10,7 @@ class Sensor:
 		filename='C000000';
 		self.adc1 = ADC.ADS1115()
 		self.numeracion=open('numeracion.txt','r');
-		self.a=numeracion.readline(1); 
+		a=self.numeracion.readline(1); 
 		self.numeracion=open('numeracion.txt','w');
 		self.numeracion.write(str(int(a)+1));
 		self.file1=filename[0:len(filename)-len(a)-2]+'CH1'+a;
@@ -18,14 +18,14 @@ class Sensor:
 		self.numeracion.close();
 		self.GAIN = 16
 		self.adc1.start_adc(1, gain=self.GAIN, data_rate=860)
-	def VoltMeas(self,time):
-		self.vout=[]
-		self.time=time;
+	def VoltMeas(self, period):
+		vout=[]
+		self.time=period;
 		start=time.time();
-		while (time.time() - start) <= self.time:
-			volt1 = adc1.get_last_result()
+		while (time.time() - start) <= float(self.time):
+			volt1 = self.adc1.get_last_result()
 			vout.append(volt1)
-		t=np.linspace(0,tf,len(vout))
+		t=np.linspace(0,period,len(vout))
 		vout=np.array(vout)
 		Cal=460.5659
 		volt1Meas=Cal*vout/32767.0
@@ -38,9 +38,9 @@ class Sensor:
 		tm=t[1]-t[0]
 		atm[0]=len(w);
 		atm[1]=tm;		
-		filename1=filename1+'.CSV'
-		np.savetxt(filename1,np.array([a,atm,a,w,t].T,delimiter=',')
+		self.file1=self.file1+'.CSV'
+		np.savetxt(self.file1,np.array([a,atm,a,w,t]).T,delimiter=',')
 		plt.style.use('ggplot')
 		plt.plot(t,w)
-		plt.show()
-		adc1.stop_adc()
+		plt.show(block=False)
+		self.adc1.stop_adc()
