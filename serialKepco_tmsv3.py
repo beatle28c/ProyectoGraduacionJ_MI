@@ -224,7 +224,7 @@ class Source:
 		self.k.flushInput()
 		#plt.plot(t,funct)
 		#plt.show(block=False);
-		print([ts,1.0/(ts*len(funct))]);
+		print([ts,1.0/(ts*len(funct)),Volt]);
 	def WriteHarm(self, Volt,f,n,C,y):
 		self.V=Volt;
 		self.f=f

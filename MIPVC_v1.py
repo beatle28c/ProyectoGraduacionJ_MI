@@ -81,7 +81,8 @@ def main():
 			
 		if caracterizar.clicked(pt):
 			mensaje.setText("Ejecutando rutina de caracterización...")
-		
+			execfile('caracterizarv0_1.py')
+			mensaje.setText("¡Listo!")
 		if CalidadE.clicked(pt):
 			execfile('fft_file_osc2.py')
 

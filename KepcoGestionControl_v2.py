@@ -35,16 +35,6 @@ def main():
 	heigh_b=1.5;
 	Tm=0.0005;
 	global Source;
-	puertos=glob.glob('/dev/tty[U]*')
-	try:
-		puerto1 = puertos[0]
-	except IndexError:
-		puerto1 = 'no hay dispositivo'
-	try:
-		puerto2 = puertos[1]
-	except IndexError:
-		puerto2 = 'no hay dispositivo'
-	
 		
 	win = GraphWin("Control de Fuentes Kepco",width=1100, height=300)
 	win.setCoords(0,0,ygrid,xgrid)
@@ -64,30 +54,54 @@ def main():
 	line2.draw(win)
 	
 	sin = Button(win, Point(refx,refy), width_b, heigh_b, "sin(ωt)")
-	sin.activate()
+	#sin.activate()
 	Harm = Button(win, Point(refx,refy-3), width_b, heigh_b, "Ármonicas")
-	Harm.activate()
-	currM = Button(win, Point(refx,refy-6), width_b, heigh_b, "Current Mode")
-	currM.activate()
-	dcout = Button(win, Point(refx,refy-9), width_b, heigh_b, "DC out")
-	dcout.activate()
+	#Harm.activate()
+	currM = Button(win, Point(refx,refy-6), width_b, heigh_b, "Modo Corriente")
+	#currM.activate()
+	dcout = Button(win, Point(refx,refy-9), width_b, heigh_b, "Salida DC")
+	#dcout.activate()
 	info = Button(win, Point(refx,refy-12), width_b, heigh_b, "Información Fuente")
-	info.activate()
-	stop = Button(win, Point(refx,refy-15), width_b, heigh_b, "Stop")
-	stop.activate()
+	#info.activate()
+	stop = Button(win, Point(refx,refy-15), width_b, heigh_b, "Detener")
+	#stop.activate()
 
 	sin2 = Button(win, Point(refx2,refy), width_b, heigh_b, "sin(ωt)")
-	sin2.activate()
+	#sin2.activate()
 	Harm2 = Button(win, Point(refx2,refy-3), width_b, heigh_b, "Ármonicas")
-	Harm2.activate()
-	currM2 = Button(win, Point(refx2,refy-6), width_b, heigh_b, "Current Mode")
-	currM2.activate()
-	dcout2 = Button(win, Point(refx2,refy-9), width_b, heigh_b, "DC out")
-	dcout2.activate()
+	#Harm2.activate()
+	currM2 = Button(win, Point(refx2,refy-6), width_b, heigh_b, "Modo Corriente")
+	#currM2.activate()
+	dcout2 = Button(win, Point(refx2,refy-9), width_b, heigh_b, "Salida DC")
+	#dcout2.activate()
 	info2 = Button(win, Point(refx2,refy-12), width_b, heigh_b, "Información Fuente")
-	info2.activate()
-	stop2 = Button(win, Point(refx2,refy-15), width_b, heigh_b, "Stop")
-	stop2.activate()
+	#info2.activate()
+	stop2 = Button(win, Point(refx2,refy-15), width_b, heigh_b, "Detener")
+	#stop2.activate()
+	
+	puertos=glob.glob('/dev/tty[U]*')
+	try:
+		puerto1 = puertos[0]
+	except IndexError:
+		sin.deactivate()
+		Harm.deactivate()
+		currM.deactivate()
+		dcout.deactivate()
+		info.deactivate()
+		stop.deactivate()
+		puerto1 = 'no hay dispositivo'
+		
+	try:
+		puerto2 = puertos[1]
+	except IndexError:
+		sin2.deactivate()
+		Harm2.deactivate()
+		currM2.deactivate()
+		dcout2.deactivate()
+		info2.deactivate()
+		stop2.deactivate()
+		puerto2 = 'no hay dispositivo'
+	
 	
 	connects1 = Button(win, Point(refx+7,refy+3), width_b-1.3, heigh_b, "Conectar")
 	connects1.activate()
@@ -100,7 +114,7 @@ def main():
 	cal = Button(win, Point(21.5,6), 2, 2, "Calibrar")
 	cal.activate()
 	
-	quitButton = Button(win, Point(21.5,2), 2, 2, "Quit")
+	quitButton = Button(win, Point(21.5,2), 2, 2, "Salir")
 	quitButton.activate()
 	
 	
@@ -329,10 +343,23 @@ def main():
 		try:
 			puerto1 = puertos[0]
 		except IndexError:
+			sin.deactivate()
+			Harm.deactivate()
+			currM.deactivate()
+			dcout.deactivate()
+			info.deactivate()
+			stop.deactivate()
 			puerto1 = 'no hay dispositivo'
+			
 		try:
 			puerto2 = puertos[1]
-		except IndexError:	
+		except IndexError:
+			sin2.deactivate()
+			Harm2.deactivate()
+			currM2.deactivate()
+			dcout2.deactivate()
+			info2.deactivate()
+			stop2.deactivate()
 			puerto2 = 'no hay dispositivo'
 		port1_val.setText(puerto1)
 		port2_val.setText(puerto2)
@@ -350,13 +377,25 @@ def main():
 			m1=kepco1.connectport()
 			m2=kepco1.identify()
 			mensaje.setText(m1 + "\n" + m2)
-			
+			sin.activate()
+			Harm.activate()
+			currM.activate()
+			dcout.activate()
+			info.activate()
+			stop.activate()
+				
 		if connects2.clicked(pt):
 			port2=port2_val.getText()
 			kepco2=SK.Source("Fuente2",port2)
 			m1=kepco2.connectport()
 			m2=kepco2.identify()
 			mensaje2.setText(m1 + "\n" + m2)
+			sin2.activate()
+			Harm2.activate()
+			currM2.activate()
+			dcout2.activate()
+			info2.activate()
+			stop2.activate()
 		
 		if dcout.clicked(pt):
 			V=float(volt_val.getText())
@@ -434,11 +473,10 @@ def main():
 			
 		if stop2.clicked(pt):
 			kepco2.stop()
-		"""	
+		
 		if caracterizar.clicked(pt):
-			#osc1=getWave()
-			#osc1.OscWave()
-		"""
+			execfile('caracterizarv0_1.py')
+		
 		pt = win.getMouse()
 	win.close()
 main()
