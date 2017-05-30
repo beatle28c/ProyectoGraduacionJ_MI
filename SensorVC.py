@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.signal import savgol_filter
 import RPi.GPIO as GPIO
+import threading
 
-class Sensor:
+class Sensor():
 	def __init__(self):
 		filename='C000000';
 		self.adc1 = ADC.ADS1115()
