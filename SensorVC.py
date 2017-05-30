@@ -39,7 +39,7 @@ class Sensor:
 		atm[0]=len(w);
 		atm[1]=tm;		
 		self.file1=self.file1+'.CSV'
-		np.savetxt(self.file1,np.array([a,atm,a,w,t]).T,delimiter=',')
+		np.savetxt(self.file1,np.array([a,atm,a,t,w]).T,delimiter=',')
 		plt.style.use('ggplot')
 		plt.plot(t,w)
 		plt.show(block=False)
