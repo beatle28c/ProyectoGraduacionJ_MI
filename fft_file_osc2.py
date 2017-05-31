@@ -90,7 +90,7 @@ def main():
 			
 		if SearchFile.clicked(pt):
 			file_name=[]
-			file_name=tkFileDialog.askopenfilenames(initialdir='/media',filetypes=[('CSV files', '*.CSV'), ('all files', '*')])
+			file_name=tkFileDialog.askopenfilenames(initialdir='/',filetypes=[('CSV files', '*.CSV'), ('all files', '*')])
 			data=osc1.file(file_name,1,4);
 			for i in range(0,16):
 					meas[i].setText("")
