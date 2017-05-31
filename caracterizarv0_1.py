@@ -24,7 +24,7 @@ from urllib2 import urlopen
 import glob ##### para buscar los puertos USB disponibles
 import controlTektronix as CT
 import RPi.GPIO as GPIO
-import SensorVC as VC
+import SensorVC_v2 as VC
 global GPIO
 global SK
 global CT
@@ -225,11 +225,12 @@ def main():
 			mensaje.setText("Caracterizando...")
 			osc1=CT.getWave();
 			#meas=VC.Sensor();
+			meas=VC.Sensor(55*(1+n));
 			alerta1=osc1.connectOsc()
 			mensaje.setText("Caracterizando..."+'\n'+alerta1)
 			alerta2=osc1.OscWave()
 			mensaje.setText("Caracterizando..."+'\n'+alerta2)
-			meas.VoltMeas(10).start();
+			meas.start();
 			#meas.CurrMeas(55*(1+n));
 			##Rutina Barrido de Frecuencias##
 			osc1=CT.getWave();
