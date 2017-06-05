@@ -224,12 +224,12 @@ def main():
 			Salir.deactivate()
 			mensaje.setText("Caracterizando...")
 			osc1=CT.getWave();
-			meas=VC.Sensor();
+			#meas=VC.Sensor();
 			alerta1=osc1.connectOsc()
 			mensaje.setText("Caracterizando..."+'\n'+alerta1)
 			alerta2=osc1.OscWave()
 			mensaje.setText("Caracterizando..."+'\n'+alerta2)
-			meas.VoltMeas(10);
+			meas.VoltMeas(10).start();
 			#meas.CurrMeas(55*(1+n));
 			##Rutina Barrido de Frecuencias##
 			osc1=CT.getWave();

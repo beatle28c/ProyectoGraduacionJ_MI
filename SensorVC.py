@@ -6,8 +6,9 @@ from scipy.signal import savgol_filter
 import RPi.GPIO as GPIO
 import threading
 
-class Sensor():
+class Sensor(threading.Thread):
 	def __init__(self):
+		threading.Thread.__init__(self)
 		filename='C000000';
 		self.adc1 = ADC.ADS1115()
 		self.numeracion=open('numeracion.txt','r');
