@@ -53,7 +53,7 @@ t=np.linspace(0,tf,len(vout))
 a=max(vout)-((max(vout)-min(vout))/2.0)
 vout=vout-a
 w=savgol_filter(vout,5,1,mode='nearest')
-w=savgol_filter(vout,11,1)
+#w=savgol_filter(vout,11,1)
 np.savetxt('MeasureCurrent.CSV',w,delimiter=',')
 #w=savgol_filter(w,11,1)
 #print(len(vout))

@@ -199,6 +199,7 @@ def main():
 			time.sleep(1);
 
 	pt = win.getMouse()
+	a=1;
 	while not Salir.clicked(pt):
 		puertos=glob.glob('/dev/tty[U]*')
 		try:
