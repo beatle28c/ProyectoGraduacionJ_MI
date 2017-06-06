@@ -20,7 +20,7 @@ class Sensor(threading.Thread):
 		self.file2=filename[0:len(filename)-len(a)-2]+'CH1'+a;
 		self.numeracion.close();
 		self.GAIN = 16
-		self.adc1.start_adc(1, gain=self.GAIN, data_rate=860)
+		self.adc1.start_adc(2, gain=self.GAIN, data_rate=860)
 	def run(self):
 		print('Inicio')
 		vout=[]
