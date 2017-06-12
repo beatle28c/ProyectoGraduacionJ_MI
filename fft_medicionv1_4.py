@@ -89,7 +89,7 @@ class fft_osc:
 			for p in range(0,m-1,2):
 				print(tpos[p])
 				print(tpos[p+1])
-				delta=tpos[p]-tpos[p+1]
+				delta=tpos[p+1]-tpos[p]
 				data[p][3]='{:0,.2f}'.format(np.cos(360.0*(float(delta)/float(data[p][1]))));
 				
 		for p in range(1,m+1):
@@ -100,9 +100,9 @@ class fft_osc:
 			plt.grid(True)
 			plt.xlabel('Tiempo (s)')
 			if (max(S[p-1])>10):
-				plt.ylabel('Amplitud (V)')
+				plt.ylabel('Tensión (V)'.decode('utf-8'))
 			else:
-				plt.ylabel('Amplitud (C)')
+				plt.ylabel('Corriente (A)')
 		for p in range(1,m+1):
 			ax=plt.subplot(2,m,p+m)
 			
